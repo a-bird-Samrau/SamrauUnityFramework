@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Input;
 using Player;
 using SaveLoad;
 using Settings;
@@ -39,7 +40,7 @@ namespace Engine
 
             if (playerStart == null)
             {
-                throw new NullReferenceException("Player Start отсутствует!");
+                throw new NullReferenceException("Player Start is missing!");
             }
 
             var playerStartTransform = playerStart.transform;
@@ -65,8 +66,8 @@ namespace Engine
                 return;
             }
             
-            _activeInputHandler.StopControlling();
-            _activeUserInterface.SendOnPlayerCharacterDestroyed();
+            _activeInputHandler.ClearControl();
+            _activeUserInterface.SendOnPlayerCharacterDestroy();
         }
         
         private void OnLevelLoaded(ILevel level)
@@ -83,7 +84,7 @@ namespace Engine
         {
             if (_isActive)
             {
-                throw new Exception("Игра уже запущена!");
+                throw new Exception("The game is already running!");
             }
             
             _activeInputHandler = Utilities.CreateGameObjectWithBehaviour<InputHandler>("Input Handler");

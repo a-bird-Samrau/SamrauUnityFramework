@@ -1,11 +1,10 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Behaviour = Core.Behaviour;
 
-namespace Player
+namespace Player.FirstPersonCharacter
 {
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerMotor : Behaviour
+    public class FirstPersonMotor : Behaviour
     {
         [SerializeField] private float _gravity;
         
@@ -133,17 +132,22 @@ namespace Player
             UpdateMovement();
             UpdateSlopeMovement();
 
+            if (_inputDirection != Vector3.zero)
+            {
+                LastInputDirection = _inputDirection;
+            }
+            
             _inputDirection = Vector3.zero;
         }
 
-        public void Move(Vector3 direction)
+        public void MoveForward(float value)
         {
-            if (direction != Vector3.zero)
-            {
-                LastInputDirection = direction;
-            }
-            
-            _inputDirection = direction;
+            _inputDirection.z = value;
+        }
+
+        public void MoveRight(float value)
+        {
+            _inputDirection.x = value;
         }
 
         public void StartRunning()

@@ -6,34 +6,24 @@ namespace UI
 {
     public class HeadUpDisplay : Behaviour
     {
-        [SerializeField] private GameObject _crosshair;
-
-        private IPlayableCharacter _playableCharacter;
-        
-        public void Construct(IPlayableCharacter playableCharacter)
+        public void Construct(PlayerCharacter playerCharacter)
         {
-            playableCharacter.Pointer.Pointing += OnPointing;
-            playableCharacter.Pointer.UnPointed += OnUnPointed;
+            OnConstruct(playerCharacter);
+        }
+
+        protected virtual void OnConstruct(PlayerCharacter playerCharacter)
+        {
             
-            _playableCharacter = playableCharacter;
         }
 
-        private void OnPointing(GameObject target)
+        protected virtual void OnClear()
         {
-            _crosshair.Activate();
-        }
-        
-        private void OnUnPointed()
-        {
-            _crosshair.Deactivate();
+            
         }
 
         public void Clear()
         {
-            _playableCharacter.Pointer.Pointing -= OnPointing;
-            _playableCharacter.Pointer.UnPointed -= OnUnPointed;
-
-            _playableCharacter = null;
+            OnClear();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Editor
 	[InitializeOnLoad]
 	public static class AutoSceneLoader
 	{
-		private const string EntryScenePath = "Assets/Scenes/EntryScene.unity";
+		private const string EntryScenePath = "Assets/Content/Scenes/EntryScene.unity";
 		private const string ActiveScenePrefKey = "activeScene";
 
 		static AutoSceneLoader()

@@ -1,11 +1,10 @@
-﻿using Core;
-using Player;
+﻿using Player;
 
 namespace Placeables
 {
     public interface IInteractable
     {
-        bool Interact(IInteraction interaction);
+        bool Interact(PlayerCharacter playerCharacter);
         bool IsInteractable { get; }
     }
 }

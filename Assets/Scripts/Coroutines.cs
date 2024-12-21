@@ -11,15 +11,15 @@ public class Coroutines : Behaviour
     {
         if (_instance != null)
         {
-            throw new Exception("Обработчик корутинов уже был проинициализирован");
+            throw new Exception("The coroutine handler has already been initialized");
         }
 
         _instance = Utilities.CreateGameObjectWithBehaviour<Coroutines>("Coroutines");
     }
 
-    public static Coroutine Run(IEnumerator coroutine)
+    public static Coroutine Run(IEnumerator enumerator)
     {
-        return _instance.StartCoroutine(coroutine);
+        return _instance.StartCoroutine(enumerator);
     }
 
     public static void Stop(Coroutine coroutine)

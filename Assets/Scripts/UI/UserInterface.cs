@@ -9,33 +9,41 @@ namespace UI
     {
         [SerializeField] private HeadUpDisplay _headUpDisplay;
 
-        private IPlayableCharacter _playableCharacter;
+        private PlayerCharacter _playerCharacter;
         private Game _game;
 
         public void Construct(Game game)
         {
-            _game = game;
+            OnConstruct(game);
         }
 
-        public void SendOnPlayerCharacterSpawned(IPlayableCharacter playableCharacter)
+        protected virtual void OnConstruct(Game game)
         {
-            _headUpDisplay.Construct(playableCharacter);
             
-            _playableCharacter = playableCharacter;
         }
 
-        public void SendOnPlayerCharacterDestroyed()
+        protected virtual void OnPlayerCharacterSpawned(PlayerCharacter playerCharacter)
+        {
+            
+        }
+
+        protected virtual void OnPlayerCharacterDestroy()
+        {
+            
+        }
+
+        public void SendOnPlayerCharacterSpawned(PlayerCharacter playerCharacter)
+        {
+            _headUpDisplay.Construct(_playerCharacter);
+            
+            OnPlayerCharacterSpawned(playerCharacter);
+        }
+
+        public void SendOnPlayerCharacterDestroy()
         {
             _headUpDisplay.Clear();
             
-            _playableCharacter = null;
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-
-            _game = null;
+            OnPlayerCharacterDestroy();
         }
     }
 }

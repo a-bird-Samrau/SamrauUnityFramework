@@ -1,4 +1,5 @@
 ﻿using System;
+using Input;
 using UnityEngine;
 
 namespace Player
@@ -6,13 +7,9 @@ namespace Player
     public interface IControllable
     {
         event Action<InputMode> InputModeChanged;
-        
-        void Move(Vector3 direction);
-        
-        void LookAt(float value);
-        void Turn(float value);
+        event Action<bool> InputModeEnableChanged;
 
-        void Interact();
+        void SetupInputComponent(IInputComponent inputComponent);
 
         InputMode CurrentInputMode { get; }
     }

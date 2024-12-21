@@ -1,18 +1,17 @@
 ﻿using System;
-using Core;
 using Placeables;
 using UnityEngine;
 
-namespace Player
+namespace Player.FirstPersonCharacter
 {
     [Serializable]
-    public class PlayerInteraction
+    public class FirstPersonInteractionRaycaster
     {
         [SerializeField] private Transform _cameraTransform;
         [SerializeField] private float _distance;
         [SerializeField] private LayerMask _layerMask;
         
-        public bool TryInteract(IInteraction interaction)
+        public bool RaycastToInteract(PlayerCharacter playerCharacter)
         {
             var ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
 
@@ -26,7 +25,7 @@ namespace Player
                 return false;
             }
 
-            return interactive.IsInteractable && interactive.Interact(interaction);
+            return interactive.IsInteractable && interactive.Interact(playerCharacter);
         }
     }
 }

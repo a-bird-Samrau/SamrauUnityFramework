@@ -1,11 +1,12 @@
 ﻿using System;
 using Placeables;
+using Player.FirstPersonCharacter;
 using UnityEngine;
 using Behaviour = Core.Behaviour;
 
 namespace Player
 {
-    public class PlayerPointer : Behaviour,
+    public class FirstPersonPointer : Behaviour,
         IPointer
     {
         public event Action<GameObject> Pointing;

@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using Behaviour = Core.Behaviour;
 
-namespace Player
+namespace Player.FirstPersonCharacter
 {
-    public class PlayerCamera : Behaviour
+    public class FirstPersonCamera : Behaviour
     {
         [SerializeField] private Camera _camera;
 

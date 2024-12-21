@@ -6,7 +6,7 @@ namespace Placeables
 {
     public class TestInteractive : Interactive
     {
-        protected override bool OnInteract(IInteraction interaction)
+        protected override bool OnInteract(PlayerCharacter playerCharacter)
         {
             Debug.Log("Test Interactive!!!");
             

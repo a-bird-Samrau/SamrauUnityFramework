@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using Behaviour = Core.Behaviour;
 
-namespace Player
+namespace Player.FirstPersonCharacter
 {
-	public class PlayerBob : Behaviour
+	public class FirstPersonBob : Behaviour
 	{
 		[SerializeField] private Transform _transform;
 
