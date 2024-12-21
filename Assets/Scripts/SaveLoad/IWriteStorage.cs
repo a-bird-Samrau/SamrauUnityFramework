@@ -1,6 +1,6 @@
 ﻿namespace SaveLoad
 {
-    public interface IWritableStorage
+    public interface IWriteStorage
     {
         void Write<T>(string key, T value);
     }

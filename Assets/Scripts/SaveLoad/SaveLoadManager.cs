@@ -4,8 +4,8 @@ using UnityEngine;
 namespace SaveLoad
 {
     public class SaveLoadManager : 
-        IReadableStorage, 
-        IWritableStorage
+        IReadStorage, 
+        IWriteStorage
     {
         private readonly SaveLoadFormatter _formatter;
         private readonly string _path;

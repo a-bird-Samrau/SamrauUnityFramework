@@ -12,7 +12,7 @@ namespace Settings
             _path = path;
         }
         
-        public bool Read(out global::Settings.Settings settings)
+        public bool Read(out Settings settings)
         {
             settings = null;
             
@@ -28,7 +28,7 @@ namespace Settings
                 return false;
             }
 
-            var loadedSettings = JsonUtility.FromJson<global::Settings.Settings>(content);
+            var loadedSettings = JsonUtility.FromJson<Settings>(content);
 
             if (loadedSettings == null)
             {
@@ -40,7 +40,7 @@ namespace Settings
             return true;
         }
 
-        public void Write(global::Settings.Settings settings)
+        public void Write(Settings settings)
         {
             var content = JsonUtility.ToJson(settings);
             

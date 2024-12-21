@@ -11,7 +11,7 @@ namespace Engine
         [SerializeField] private UserInterface _userInterface;
         [SerializeField] private Level _startupLevel;
         [SerializeField] private Settings.Settings _defaultSettings;
-        
+
         public PlayerCharacter PlayerCharacter => _playerCharacter;
         public UserInterface UserInterface => _userInterface;
         public Level StartupLevel => _startupLevel;

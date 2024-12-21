@@ -1,6 +1,6 @@
 ﻿namespace SaveLoad
 {
-    public interface IReadableStorage
+    public interface IReadStorage
     {
         object Read<T>(string key, T valueDefault);
     }
