@@ -15,22 +15,8 @@ namespace Player
         IPlayableCharacter
     {
         public event Action<InputMode> InputModeChanged;
-        
-        public event Action CriticalWeightReached;
-        public event Action CriticalWeightRelieved;
 
-        public event Action InventoryOpened;
-        public event Action InventoryClosed;
-
-        [SerializeField] private int _inventorySize;
-        [SerializeField] private float _criticalWeight;
-        
         [SerializeField] private PlayerInteraction _interaction;
-
-        private bool _isInventoryMode;
-        private bool _isCriticalWeight;
-
-        private Inventory _inventory;
 
         private Transform _transform;
         
@@ -41,9 +27,6 @@ namespace Player
         
         public void Construct()
         {
-            _inventory = new Inventory(_inventorySize);
-            _inventory.TotalWeightChanged += OnInventoryTotalWeightChanged;
-
             _transform = transform;
 
             _motor = GetComponent<PlayerMotor>();
@@ -61,28 +44,7 @@ namespace Player
         {
             SetInputMode(InputMode.Game);
         }
-
-        private void OnInventoryTotalWeightChanged(float value)
-        {
-            var isCriticalWeight = value >= _criticalWeight;
-
-            if (_isCriticalWeight == isCriticalWeight)
-            {
-                return;
-            }
-            
-            if (isCriticalWeight)
-            {
-                CriticalWeightReached?.Invoke();
-            }
-            else
-            {
-                CriticalWeightRelieved?.Invoke();
-            }
-
-            _isCriticalWeight = isCriticalWeight;
-        }
-
+        
         private void SetInputMode(InputMode mode)
         {
             CurrentInputMode = mode;
@@ -114,11 +76,6 @@ namespace Player
 
         public void Move(Vector3 direction)
         {
-            if (_isCriticalWeight)
-            {
-                return;
-            }
-            
             _motor.Move(direction);
         }
 
@@ -132,79 +89,12 @@ namespace Player
             _camera.Turn(value);
         }
 
-        public void StartRunning()
-        {
-            _motor.StartRunning();
-        }
-
-        public void StopRunning()
-        {
-            _motor.StopRunning();
-        }
-
         public void Interact()
         {
             _interaction.TryInteract(this);
         }
 
-        public void ToggleInventory()
-        {
-            _isInventoryMode = !_isInventoryMode;
-            SetInputMode(_isInventoryMode ? InputMode.UI : InputMode.Game);
-
-            if (_isInventoryMode)
-            {
-                InventoryOpened?.Invoke();
-            }
-            else
-            {
-                InventoryClosed?.Invoke();
-            }
-        }
-
-        public bool TakeItem(Item item, int count)
-        {
-            return _inventory.Place(item, count);
-        }
-
-        public bool RemoveItem(Item item, int count, bool force, out int remains)
-        {
-            return _inventory.Remove(item, count, force, out remains);
-        }
-        
-        public bool DropItem(Item item, int count, bool force, out int remains)
-        {
-            if (!RemoveItem(item, count, force, out remains))
-            {
-                return false;
-            }
-            
-            var number = count - remains;
-
-            while (number > 0)
-            {
-                Instantiate(item.Prefab, _transform.position, Quaternion.identity);
-                
-                number -= 1;
-            }
-
-            return true;
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-
-            _inventory.TotalWeightChanged -= OnInventoryTotalWeightChanged;
-            
-            _inventory.Clear();
-            _inventory = null;
-        }
-        
         public InputMode CurrentInputMode { get; private set; }
-        public float CriticalWeight => _criticalWeight;
-        
-        public IInventory Inventory => _inventory;
         public IPointer Pointer => _pointer;
     }
 }

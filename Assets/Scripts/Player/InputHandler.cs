@@ -1,5 +1,4 @@
 ﻿using System;
-using Engine;
 using Settings;
 using UnityEngine;
 using Behaviour = Core.Behaviour;
@@ -13,6 +12,7 @@ namespace Player
         public void Control(IControllable target)
         {
             target.InputModeChanged += OnInputModeChanged;
+            
             _target = target;
         }
 
@@ -35,11 +35,6 @@ namespace Player
 
             var currentInputMode = _target.CurrentInputMode;
 
-            if (Input.GetButtonDown("Inventory"))
-            {
-                _target.ToggleInventory();
-            }
-            
             switch (currentInputMode)
             {
                 case InputMode.Game:
@@ -55,16 +50,6 @@ namespace Player
                     if (Input.GetButtonDown("Fire1"))
                     {
                         _target.Interact();
-                    }
-
-                    if (Input.GetButtonDown("Sprint"))
-                    {
-                        _target.StartRunning();
-                    }
-
-                    if (Input.GetButtonUp("Sprint"))
-                    {
-                        _target.StopRunning();
                     }
 
                     break;

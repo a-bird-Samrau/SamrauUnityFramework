@@ -12,13 +12,8 @@ namespace Player
         void LookAt(float value);
         void Turn(float value);
 
-        void StartRunning();
-        void StopRunning();
-
         void Interact();
 
-        void ToggleInventory();
-        
         InputMode CurrentInputMode { get; }
     }
 }
