@@ -11,16 +11,17 @@ namespace Player.FirstPersonCharacter
         [SerializeField] private float _walkSpeed;
         [SerializeField] private float _runningSpeedMultiplier;
 
-        [SerializeField] private float _slopeRayLength;
-        [SerializeField] private LayerMask _slopeRayLayerMask;
-        
-        [SerializeField] private float _slopeForce;
+        [SerializeField] private float _jumpForce;
+        [SerializeField] private float _jumpMaxHoldTime;
 
-        private Vector3 _slopeNormal;
+        [SerializeField] private bool _canJump;
+
+        private float _jumpHoldTime;
+
+        private bool _isJumping;
+        private bool _inputToJumping;
 
         private bool _isRunning;
-
-        private float _currentSpeed;
 
         private Vector3 _moveDirection;
         private Vector3 _inputDirection;
@@ -37,12 +38,27 @@ namespace Player.FirstPersonCharacter
 
         private void UpdateSpeed()
         {
-            _currentSpeed = _walkSpeed;
+            CurrentSpeed = _walkSpeed;
 
             if (_isRunning)
             {
-                _currentSpeed *= _runningSpeedMultiplier;
+                CurrentSpeed *= _runningSpeedMultiplier;
             }
+        }
+
+        protected void CalculateGroundMovement()
+        {
+            _moveDirection = _transform.TransformDirection(_inputDirection);
+            _moveDirection *= CurrentSpeed;
+        }
+
+        protected void CalculateAirMovement()
+        {
+            var direction = _transform.TransformDirection(_inputDirection);
+
+            _moveDirection.x = direction.x * CurrentSpeed;
+            _moveDirection.y -= _gravity * Time.deltaTime;
+            _moveDirection.z = direction.z * CurrentSpeed;
         }
 
         private void UpdateMovement()
@@ -51,77 +67,33 @@ namespace Player.FirstPersonCharacter
             
             if (_characterController.isGrounded)
             {
-                _moveDirection = _transform.TransformDirection(_inputDirection);
-                _moveDirection *= _currentSpeed;
-            }
+                CalculateGroundMovement();
 
-            _moveDirection.y -= _gravity * deltaTime;
-            _characterController.Move(_moveDirection * deltaTime);
-        }
-
-        private bool CheckOnSlope(out Vector3 normal)
-        {
-            normal = Vector3.up;
-            
-            if (!Physics.Raycast(new Ray(_transform.position, Vector3.down), out var hit,
-                    _characterController.height / 2 * _slopeRayLength, _slopeRayLayerMask))
-            {
-                return false;
-            }
-
-            normal = hit.normal;
-
-            return hit.normal != Vector3.up;
-        }
-
-        private void UpdateSlopeMovement()
-        {
-            if (!CheckOnSlope(out var normal))
-            {
-                if (_slopeNormal == Vector3.zero)
+                if (_isJumping && !_inputToJumping)
                 {
-                    return;
+                    _isJumping = false;
                 }
-
-                normal = _slopeNormal;
-            }
-
-            var deltaTime = Time.deltaTime;
-            var isSliding = Vector3.Angle(normal, Vector3.up) > _characterController.slopeLimit;
-
-            if (isSliding)
-            {
-                var cross = Vector3.Cross(normal, Vector3.up);
-                var slideDirection = Vector3.Cross(cross, normal);
-
-                _characterController.Move(-slideDirection * (_slopeForce * deltaTime));
             }
             else
             {
-                if (_inputDirection.magnitude == 0f)
+                CalculateAirMovement();
+            }
+            
+            if (_inputToJumping)
+            {
+                _moveDirection.y = _jumpForce;
+
+                if (_jumpHoldTime < _jumpMaxHoldTime)
                 {
-                    return;
+                    _jumpHoldTime += deltaTime;
                 }
-                
-                _characterController.Move(Vector3.down * _characterController.height / 2f * (_slopeForce * deltaTime));
+                else
+                {
+                    StopJumping();
+                }
             }
-        }
-
-        private void OnControllerColliderHit(ControllerColliderHit hit)
-        {
-            if (hit.controller.collisionFlags != CollisionFlags.Below)
-            {
-                return;
-            }
-
-            var normal = hit.normal;
-
-            if (normal == Vector3.up)
-            {
-                return;
-            }
-
-            _slopeNormal = normal;
+            
+            _characterController.Move(_moveDirection * deltaTime);
         }
 
         protected override void Update()
@@ -130,7 +102,6 @@ namespace Player.FirstPersonCharacter
             
             UpdateSpeed();
             UpdateMovement();
-            UpdateSlopeMovement();
 
             if (_inputDirection != Vector3.zero)
             {
@@ -160,13 +131,30 @@ namespace Player.FirstPersonCharacter
             _isRunning = false;
         }
 
-        private void OnDrawGizmos()
+        public void Jump()
         {
-            Gizmos.matrix = transform.localToWorldMatrix;
-            Gizmos.DrawLine(Vector3.zero, Vector3.down * _slopeRayLength);
+            if (!_canJump)
+            {
+                return;
+            }
+            
+            if (_isJumping)
+            {
+                return;
+            }
+            
+            _inputToJumping = true;
+            _isJumping = true;
+        }
+
+        public void StopJumping()
+        {
+            _inputToJumping = false;
+            _jumpHoldTime = 0f;
         }
 
         public Vector3 LastInputDirection { get; private set; }
         public Vector3 Velocity => _moveDirection;
+        public float CurrentSpeed { get; private set; }
     }
 }

@@ -202,11 +202,9 @@ MonoBehaviour:
   _gravity: 9.8
   _walkSpeed: 2
   _runningSpeedMultiplier: 1.5
-  _slopeRayLength: 1.5
-  _slopeRayLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  _slopeForce: 2
+  _jumpForce: 5
+  _jumpMaxHoldTime: 0
+  _canJump: 1
 --- !u!114 &5517048626741783506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,7 +255,7 @@ MonoBehaviour:
   _invertHorizontalTilt: 1
   _invertVerticalTilt: 0
   _shakeSpeed: 8
-  _shakeIntensity: 0.15
+  _shakeIntensity: 0.2
 --- !u!114 &3155798617821425140
 MonoBehaviour:
   m_ObjectHideFlags: 0

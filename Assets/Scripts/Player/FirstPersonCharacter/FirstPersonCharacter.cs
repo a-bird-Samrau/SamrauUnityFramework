@@ -46,13 +46,12 @@ namespace Player.FirstPersonCharacter
             
             var velocity = _motor.Velocity;
             velocity.y = 0f;
-
-            var velocityMagnitude = velocity.magnitude;
+            
             var lastInputDirection = _motor.LastInputDirection;
 
-            if (velocityMagnitude > 0.01f)
+            if (velocity.magnitude > 0.01f)
             {
-                _bob.Bob(lastInputDirection * velocityMagnitude);
+                _bob.Bob(lastInputDirection * _motor.CurrentSpeed);
             }
             else
             {
@@ -93,6 +92,16 @@ namespace Player.FirstPersonCharacter
             _motor.StopRunning();
         }
 
+        private void Jump()
+        {
+            _motor.Jump();
+        }
+
+        private void StopJumping()
+        {
+            _motor.StopJumping();
+        }
+
         private void Interact()
         {
             _interactionRaycaster.RaycastToInteract(this);
@@ -105,9 +114,12 @@ namespace Player.FirstPersonCharacter
             
             inputComponent.BindAxis("Mouse X", false, Turn);
             inputComponent.BindAxis("Mouse Y", false, LookAt, -1f);
-            
+
             inputComponent.BindButton("Sprint", InputButtonMode.Pressed, StartRunning);
             inputComponent.BindButton("Sprint", InputButtonMode.Released, StopRunning);
+            
+            inputComponent.BindButton("Jump", InputButtonMode.Pressed, Jump);
+            inputComponent.BindButton("Jump", InputButtonMode.Released, StopJumping);
             
             inputComponent.BindButton("Fire1", InputButtonMode.Pressed, Interact);
         }
