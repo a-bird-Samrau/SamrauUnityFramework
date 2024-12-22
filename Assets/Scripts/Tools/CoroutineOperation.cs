@@ -4,19 +4,17 @@ using UnityEngine;
 
 namespace Tools
 {
-    public abstract class ProcedureAnimation
+    public abstract class CoroutineOperation
     {
         public event Action<float> ValueChanged;
         public event Action Completed;
 
-        private Coroutine _routine;
-
+        private Coroutine _coroutine;
         private readonly TimeType _timeType;
 
-        protected ProcedureAnimation(float duration, TimeType timeType)
+        protected CoroutineOperation(float duration, TimeType timeType)
         {
             _timeType = timeType;
-        
             Duration = duration;
         }
 
@@ -32,13 +30,24 @@ namespace Tools
             Completed?.Invoke();
         }
 
-        protected abstract void OnBeginning();
-        protected abstract void OnValueChanged(float value);
-        protected abstract void OnCompleted();
-
-        public bool Play(bool force)
+        protected virtual void OnRunning()
         {
-            if (IsPlaying)
+            
+        }
+
+        protected virtual void OnValueChanged(float value)
+        {
+            
+        }
+
+        protected virtual void OnCompleted()
+        {
+            
+        }
+
+        public bool Run(bool force)
+        {
+            if (IsRunning)
             {
                 if (!force)
                 {
@@ -48,23 +57,22 @@ namespace Tools
                 Stop();
             }
             
-            OnBeginning();
+            OnRunning();
 
-            _routine = Coroutines.Run(PlayRoutine(Duration, _timeType, SendOnValueChanged, SendOnCompleted));
-            
-            IsPlaying = true;
+            _coroutine = Coroutines.Run(PlayRoutine(Duration, _timeType, SendOnValueChanged, SendOnCompleted));
+            IsRunning = true;
 
             return true;
         }
 
         public void Stop()
         {
-            if (_routine != null)
+            if (_coroutine != null)
             {
-                Coroutines.Stop(_routine);
+                Coroutines.Stop(_coroutine);
             }
             
-            IsPlaying = false;
+            IsRunning = false;
         }
 
         private static float GetDeltaTime(TimeType type)
@@ -82,7 +90,7 @@ namespace Tools
         private static IEnumerator PlayRoutine(float duration, TimeType timeType, Action<float> valueChanged, System.Action completed)
         {
             var elapsedTime = 0f;
-            float progress = 0;
+            var progress = 0f;
         
             while (progress < 1f)
             {
@@ -98,7 +106,7 @@ namespace Tools
             completed?.Invoke();
         }
 
-        public bool IsPlaying { get; private set; }
+        public bool IsRunning { get; private set; }
         public float Duration { get; }
     }
 }
