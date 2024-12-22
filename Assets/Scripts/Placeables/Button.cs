@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Placeables
 {
-    public class Button : Interactive
+    public abstract class Button : Interactive
     {
         [Header("Button")]
         
@@ -24,11 +24,13 @@ namespace Placeables
             _animation = new ButtonAnimation(_duration, _offset, _axis, _transform);
         }
 
+        protected abstract bool OnPressed(PlayerCharacter playerCharacter);
+
         protected override bool OnInteract(PlayerCharacter playerCharacter)
         {
             _animation.Run(true);
-            
-            return true;
+
+            return OnPressed(playerCharacter);
         }
     }
 }

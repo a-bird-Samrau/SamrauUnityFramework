@@ -5,8 +5,10 @@ namespace Player
 {
     public class PlayerStart : Behaviour
     {
-        private void OnDrawGizmos()
+        protected override void OnDrawGizmos()
         {
+            base.OnDrawGizmos();
+            
             var cachedTransform = transform;
 
             Gizmos.matrix = cachedTransform.localToWorldMatrix;

@@ -6,7 +6,6 @@ namespace Tools
 {
     public abstract class CoroutineOperation
     {
-        public event Action<float> ValueChanged;
         public event Action Completed;
 
         private Coroutine _coroutine;
@@ -21,7 +20,6 @@ namespace Tools
         private void SendOnValueChanged(float value)
         {
             OnValueChanged(value);
-            ValueChanged?.Invoke(value);
         }
 
         private void SendOnCompleted()

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Core
@@ -20,6 +21,36 @@ namespace Core
         }
 
         protected virtual void Update()
+        {
+            
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            
+        }
+
+        protected virtual void LateUpdate()
+        {
+            
+        }
+
+        protected virtual void OnTriggerEnter(Collider other)
+        {
+            
+        }
+
+        protected virtual void OnTriggerExit(Collider other)
+        {
+            
+        }
+
+        protected virtual void OnDrawGizmos()
+        {
+            
+        }
+
+        protected virtual void OnDrawGizmosSelected()
         {
             
         }
