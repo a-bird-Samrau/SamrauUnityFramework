@@ -13,7 +13,7 @@ The input system is based on the Unity Input Manager (Input System will be imple
  * Scripts - All scripts in the project
 
 **Minima:**
-GameJolt: https://gamejolt.com/games/minimastory/875328
-Itch.io: https://abirdsamrau.itch.io/minimastory
+* GameJolt: https://gamejolt.com/games/minimastory/875328
+* Itch.io: https://abirdsamrau.itch.io/minimastory
 
 **it will be updated...**
